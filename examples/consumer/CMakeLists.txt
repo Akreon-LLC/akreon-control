@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.30)
+project(AkreonControlConsumer LANGUAGES CXX)
+find_package(AkreonControl 0.1 CONFIG REQUIRED)
+add_executable(consumer main.cpp)
+target_link_libraries(consumer PRIVATE Akreon::Control)
+enable_testing()
+add_test(NAME consumer COMMAND consumer)

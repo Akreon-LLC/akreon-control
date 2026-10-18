@@ -1,0 +1,58 @@
+# Copyright © 2026 Akreon LLC
+# SPDX-License-Identifier: Apache-2.0
+
+[build-system]
+requires = [
+  "scikit-build-core>=0.10",
+  "nanobind>=2.0",
+  "numpy>=2.0",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "akreon-control"
+version = "0.1.0"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+description = "Python bindings for Akreon Control: optimal and robust control and state estimation"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "numpy>=2.0",
+]
+
+[project.optional-dependencies]
+examples = [
+  "control>=0.10",
+  "gymnasium>=1.0",
+  "ipykernel>=6.29",
+  "jupyterlab>=4.0",
+  "nbconvert>=7.0",
+  "matplotlib>=3.9",
+  "pygame>=2.6",
+  "scipy>=1.13",
+]
+test = [
+  "nanobind>=2.0",
+  "pytest>=8.0",
+  "scikit-build-core>=0.10",
+  "ruff>=0.15",
+]
+
+[tool.scikit-build]
+cmake.version = ">=3.30"
+install.components = ["python"]
+wheel.packages = ["bindings/python/src/akreon_native"]
+
+[tool.scikit-build.cmake.define]
+AKREON_CONTROL_BUILD_PYTHON = "ON"
+BUILD_UNIT_TESTS = "OFF"
+BUILD_FUNCTIONAL_TESTS = "OFF"
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E203"]

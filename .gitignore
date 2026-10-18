@@ -1,0 +1,64 @@
+# Copyright © 2025-2026 Akreon LLC
+# SPDX-License-Identifier: Apache-2.0
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Linker files
+*.ilk
+
+# Debugger Files
+*.pdb
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# debug information files
+*.dwo
+
+*.DS_Store
+
+build
+Testing
+out
+docs/doxygen/
+
+# Local CI/development dependency checkouts
+.deps/
+CMakeUserPresets.json
+
+# Python binding development
+.venv*/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+dist/
+*.egg-info/

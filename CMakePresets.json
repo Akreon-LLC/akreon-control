@@ -1,0 +1,42 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 30,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "host-default",
+      "displayName": "Host Default",
+      "description": "Host build with unit and functional tests",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/out/build/host-default",
+      "cacheVariables": {
+        "BUILD_UNIT_TESTS": "ON",
+        "BUILD_FUNCTIONAL_TESTS": "ON"
+      }
+    },
+    {
+      "name": "host-functional-only",
+      "displayName": "Host Functional Only",
+      "description": "Host build without unit tests/Catch2",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/out/build/host-functional-only",
+      "cacheVariables": {
+        "BUILD_UNIT_TESTS": "OFF",
+        "BUILD_FUNCTIONAL_TESTS": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "host-default",
+      "configurePreset": "host-default"
+    },
+    {
+      "name": "host-functional-only",
+      "configurePreset": "host-functional-only"
+    }
+  ]
+}
