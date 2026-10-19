@@ -1,0 +1,10 @@
+@PACKAGE_INIT@
+include(CMakeFindDependencyMacro)
+if(NOT TARGET Akreon::Linalg)
+  find_dependency(AkreonLinalg 0.1 CONFIG)
+endif()
+if(NOT TARGET Akreon::Convex)
+  find_dependency(AkreonConvex 0.1 CONFIG)
+endif()
+include("${CMAKE_CURRENT_LIST_DIR}/AkreonControlTargets.cmake")
+check_required_components(AkreonControl)

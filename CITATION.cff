@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software in your research, please cite it using this metadata."
+type: software
+title: "akreon-control"
+authors:
+  - family-names: Akre
+    given-names: David
+    affiliation: Akreon LLC
+abstract: "A general-purpose library for optimal and robust control and state estimation."
+repository-code: "https://github.com/Akreon-LLC/akreon-control"
+license: Apache-2.0

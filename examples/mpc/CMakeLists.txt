@@ -1,0 +1,3 @@
+add_executable(mpc_double_integrator main.cpp)
+target_link_libraries(mpc_double_integrator PRIVATE Akreon::Control)
+add_test(NAME mpc_double_integrator COMMAND mpc_double_integrator)

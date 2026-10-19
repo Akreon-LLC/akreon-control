@@ -1,0 +1,18 @@
+# Copyright © 2025-2026 Akreon LLC
+# SPDX-License-Identifier: Apache-2.0
+
+BasedOnStyle: LLVM
+IndentWidth: 2
+ContinuationIndentWidth: 4
+ColumnLimit: 80
+IndentCaseLabels: true
+PointerAlignment: Left
+ReferenceAlignment: Left
+SortIncludes: Never
+AllowShortBlocksOnASingleLine: Always
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLoopsOnASingleLine: true
+SpaceBeforeParens: ControlStatements
+AlwaysBreakTemplateDeclarations: Yes
+PenaltyReturnTypeOnItsOwnLine: 1000

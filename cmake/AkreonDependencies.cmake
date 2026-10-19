@@ -1,0 +1,20 @@
+include(FetchContent)
+# Overrides are checked before installed packages. Existing targets are reused.
+function(akreon_resolve_dependency name package target)
+  string(TOUPPER "${name}" upper)
+  set(AKREON_${upper}_GIT_REPOSITORY "https://github.com/Akreon-LLC/akreon-${name}.git" CACHE STRING "Dependency repository URL (HTTPS or SSH)")
+  set(AKREON_${upper}_GIT_TAG "v0.1.0" CACHE STRING "Compatible dependency tag or immutable commit")
+  if(TARGET ${target})
+    return()
+  endif()
+  if(NOT FETCHCONTENT_SOURCE_DIR_AKREON_${upper})
+    find_package(${package} 0.1 CONFIG QUIET)
+    if(TARGET ${target})
+      return()
+    endif()
+  endif()
+  FetchContent_Declare(akreon_${name}
+    GIT_REPOSITORY "${AKREON_${upper}_GIT_REPOSITORY}"
+    GIT_TAG "${AKREON_${upper}_GIT_TAG}")
+  FetchContent_MakeAvailable(akreon_${name})
+endfunction()

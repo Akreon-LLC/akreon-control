@@ -1,0 +1,3 @@
+add_executable(mhe_double_integrator main.cpp)
+target_link_libraries(mhe_double_integrator PRIVATE Akreon::Control)
+add_test(NAME mhe_double_integrator COMMAND mhe_double_integrator)
