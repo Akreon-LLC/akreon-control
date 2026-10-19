@@ -1,10 +1,10 @@
 # akreon-control
 
-A general-purpose library for optimal and robust control and state estimation,
-with model predictive control (MPC), moving-horizon estimation (MHE), and control
-barrier functions (CBF) on the roadmap.
+A header-only C++26 library for optimal and robust control and state estimation,
+with native examples of model predictive control (MPC), moving-horizon estimation
+(MHE), and CLF-CBF-QP safety filters.
 
-Header-only C++26 library. Public target: `Akreon::Control`; installed package:
+Public target: `Akreon::Control`; installed package:
 `AkreonControl`.
 Control and estimation APIs use the `control` namespace.
 Public headers live under `include/akreon/control/`. Only canonical `akreon/...` include paths are supported.
@@ -82,7 +82,7 @@ installation prefix. `Akreon::Linalg` and `Akreon::Convex` propagate through
 `Akreon::Control`, along with include directories and the C++ standard requirement.
 Installed packages resolve their dependencies without fetching source.
 
-## Python bindings and notebooks
+## Python bindings and notebooks (robust & optimal control examples)
 
 Python support is optional; C++ builds do not require Python or nanobind. From
 this repository, use Python 3.12 or newer and install the package and example/test
@@ -123,29 +123,18 @@ ctest --test-dir build/python --output-on-failure
 Use `AKREON_CONTROL_BUILD_C_BINDINGS=ON` alone for the C ABI without Python.
 The [binding contract](bindings/README.md) describes compiled dimensions and results.
 
-## Model discretization
-
-Convert a real continuous `StateSpace` with inputs held over each sample:
-
-```cpp
-const auto discrete = control::c2d_zoh(continuous, dt);
-```
-
-Include `<akreon/control/model/discretization.hpp>` or the umbrella header.
-The constexpr-capable utility computes `Ad` and `Bd` from an augmented matrix
-exponential and preserves `C` and optional `D`. `dt` must be finite and positive;
-keep the sample period alongside the returned model. The MPC example shows its use.
-
-## Native control examples
+## Native control & estimation examples
 
 - [CLF-CBF-QP adaptive cruise control](examples/clf_cbf_qp/README.md): speed
   tracking and following-distance safety, with cold and warm native QP solves.
 - [MPC double integrator](examples/mpc/README.md): a constrained 20-step horizon,
   receding-horizon execution, and an H2-derived terminal cost.
+- [MHE double integrator](examples/mhe/README.md): position-only measurements,
+  velocity reconstruction, an arrival prior, and shifted warm starts.
 
 Enable native examples with `AKREON_CONTROL_BUILD_EXAMPLES=ON`. Each README
 provides build commands; CTest runs the example executable with its built-in
-checks. General MPC and CLF-CBF-QP formulations are on the
+checks. General MPC, MHE, and CLF-CBF-QP formulations are on the
 [roadmap](docs/ROADMAP.md).
 
 ## Documentation

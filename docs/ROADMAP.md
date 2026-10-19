@@ -3,16 +3,16 @@
 ## Current scope
 
 State-space/plant models, ZOH discretization, H2/H-infinity feedback and
-observers, and polytopic formulations have unit coverage. The [ACC example](../examples/clf_cbf_qp/README.md)
-demonstrates a native CLF-CBF-QP; the [MPC example](../examples/mpc/README.md)
-uses a condensed horizon and an H2-derived terminal cost. Both include
-closed-loop simulation checks.
+observers, and polytopic formulations have unit coverage. Native examples cover
+[CLF-CBF-QP ACC](../examples/clf_cbf_qp/README.md),
+[condensed MPC](../examples/mpc/README.md), and
+[position-only MHE](../examples/mhe/README.md), each with simulation checks.
 See the [architecture guide](ARCHITECTURE.md) for source organization.
 
 ## Planned work
 
 - **MPC:** general horizon assembly, terminal sets, and warm-start policies.
-- **MHE:** constrained estimation, arrival costs, and window updates.
+- **MHE:** general constrained estimation, arrival costs, and window updates.
 - **CLF-CBF-QP:** general safety filters and barrier synthesis, outlined below.
 - **Examples:** more C++ and Python applications with closed-loop validation.
 - **Numerics:** gain-recovery conditioning, scaling sensitivity, and regression tests.

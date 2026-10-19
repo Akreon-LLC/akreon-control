@@ -2,7 +2,15 @@ function(akreon_test_options target)
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(${target} PRIVATE -fconstexpr-depth=65536 -fconstexpr-steps=2000000000)
   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(${target} PRIVATE -fconstexpr-depth=65536 -fconstexpr-ops-limit=2000000000)
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 16
+        AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 17)
+      # These synthesis tests solve at runtime. Bound GCC 16's speculative
+      # constant evaluation, as in Convex's SDP tests; retain constexpr model checks.
+      # Larger control LMI canonicalizations require a five-million-op budget.
+      target_compile_options(${target} PRIVATE -fconstexpr-depth=65536 -fconstexpr-ops-limit=5000000)
+    else()
+      target_compile_options(${target} PRIVATE -fconstexpr-depth=65536 -fconstexpr-ops-limit=2000000000)
+    endif()
   endif()
   target_compile_definitions(${target} PRIVATE AKREON_REPORT_OUTPUT)
 endfunction()
