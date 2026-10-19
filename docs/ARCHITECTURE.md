@@ -12,6 +12,7 @@ Paths below are relative to `include/akreon/control/`.
 | --- | --- |
 | `control_traits.hpp` | Time domains, model concepts, state/input/output types, and port roles |
 | `model/state_space.hpp` | Continuous/discrete state-space representations |
+| `model/discretization.hpp` | Zero-order-hold continuous-to-discrete conversion |
 | `model/plant_model.hpp` | State-space models with typed input and output port layouts |
 | `feedback/` | State-feedback synthesis, H2/H-infinity and polytopic formulations, and gain recovery |
 | `estimation/` | Luenberger, H2/H-infinity, and polytopic observer formulations |

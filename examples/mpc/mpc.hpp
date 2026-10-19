@@ -38,11 +38,13 @@ constexpr auto make_system(const Config& c) {
       throw std::invalid_argument(
           "MPC configuration values must be finite and positive");
   }
-  // Exact zero-order-hold discretization of p_dot = v, v_dot = u.
-  return System(Mat{State{1.0, c.dt}, State{0.0, 1.0}},
-                Input{linalg::Vector<double, 1>{0.5 * c.dt * c.dt},
-                      linalg::Vector<double, 1>{c.dt}},
-                linalg::make_identity<double, 2>());
+  using Continuous =
+      control::StateSpace<control::TimeDomainType::CONTINUOUS, Mat, Input, Mat>;
+  const auto continuous = Continuous(
+      Mat{State{0.0, 1.0}, State{0.0, 0.0}},
+      Input{linalg::Vector<double, 1>{0.0}, linalg::Vector<double, 1>{1.0}},
+      linalg::make_identity<double, 2>());
+  return control::c2d_zoh(continuous, c.dt);
 }
 
 inline void check_solve(const auto& result, const std::string& context) {

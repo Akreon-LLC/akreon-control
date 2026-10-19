@@ -15,6 +15,11 @@ if(BUILD_UNIT_TESTS)
     FetchContent_MakeAvailable(Catch2)
   endif()
 
+  add_executable(discretization_test unit/discretization_test.cpp)
+  target_link_libraries(discretization_test PRIVATE Akreon::Control Catch2::Catch2WithMain)
+  akreon_test_options(discretization_test)
+  add_test(NAME discretization_test COMMAND discretization_test)
+
   add_executable(plant_model_test unit/plant_model_test.cpp)
   target_link_libraries(plant_model_test PRIVATE Akreon::Control Akreon::ConvexTestSupport Catch2::Catch2WithMain)
   akreon_test_options(plant_model_test)

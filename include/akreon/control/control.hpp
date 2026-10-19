@@ -17,4 +17,5 @@
 #include "akreon/control/feedback/hinf_state_feedback.hpp"
 #include "akreon/control/feedback/polytopic_state_feedback.hpp"
 #include "akreon/control/feedback/state_feedback.hpp"
+#include "akreon/control/model/discretization.hpp"
 #include "akreon/control/model/plant_model.hpp"

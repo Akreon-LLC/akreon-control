@@ -8,7 +8,7 @@ condensed QP at each update.
 ## Model and horizon
 
 For position and velocity `x = [p, v]`, with acceleration input `u`, the exact
-held-input discrete model is
+held-input discrete model, computed by `control::c2d_zoh`, is
 
 ```text
 x_next = A*x + B*u

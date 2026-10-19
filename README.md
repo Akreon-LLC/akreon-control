@@ -123,6 +123,19 @@ ctest --test-dir build/python --output-on-failure
 Use `AKREON_CONTROL_BUILD_C_BINDINGS=ON` alone for the C ABI without Python.
 The [binding contract](bindings/README.md) describes compiled dimensions and results.
 
+## Model discretization
+
+Convert a real continuous `StateSpace` with inputs held over each sample:
+
+```cpp
+const auto discrete = control::c2d_zoh(continuous, dt);
+```
+
+Include `<akreon/control/model/discretization.hpp>` or the umbrella header.
+The constexpr-capable utility computes `Ad` and `Bd` from an augmented matrix
+exponential and preserves `C` and optional `D`. `dt` must be finite and positive;
+keep the sample period alongside the returned model. The MPC example shows its use.
+
 ## Native control examples
 
 - [CLF-CBF-QP adaptive cruise control](examples/clf_cbf_qp/README.md): speed

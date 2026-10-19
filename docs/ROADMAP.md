@@ -2,8 +2,8 @@
 
 ## Current scope
 
-State-space/plant models, H2/H-infinity feedback and observers, and polytopic
-formulations have unit coverage. The [ACC example](../examples/clf_cbf_qp/README.md)
+State-space/plant models, ZOH discretization, H2/H-infinity feedback and
+observers, and polytopic formulations have unit coverage. The [ACC example](../examples/clf_cbf_qp/README.md)
 demonstrates a native CLF-CBF-QP; the [MPC example](../examples/mpc/README.md)
 uses a condensed horizon and an H2-derived terminal cost. Both include
 closed-loop simulation checks.
