@@ -55,4 +55,5 @@ option(AKREON_CONTROL_BUILD_EXAMPLES "Build native control examples and their ch
 if(AKREON_CONTROL_BUILD_EXAMPLES)
   enable_testing()
   add_subdirectory(examples/clf_cbf_qp)
+  add_subdirectory(examples/mpc)
 endif()
