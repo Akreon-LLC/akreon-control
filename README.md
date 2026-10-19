@@ -123,6 +123,19 @@ ctest --test-dir build/python --output-on-failure
 Use `AKREON_CONTROL_BUILD_C_BINDINGS=ON` alone for the C ABI without Python.
 The [binding contract](bindings/README.md) describes compiled dimensions and results.
 
+## Native control examples
+
+The [CLF-CBF-QP adaptive cruise control example](examples/clf_cbf_qp/README.md)
+assembles and solves a native QP through `Akreon::Convex` at every control step.
+It includes a hand-derived following-distance barrier, a soft speed-tracking
+CLF, actuator limits, and a checked simulation. Enable it with
+`AKREON_CONTROL_BUILD_EXAMPLES=ON`; the example README provides build commands.
+
+This is a concrete starting point for future development. A general online
+CLF-CBF-QP formulation and offline polynomial/SOS verification and synthesis of
+barriers are [planned work](docs/ROADMAP.md#clf-cbf-qp-and-barrier-synthesis).
+The current example does not add these capabilities to the public API.
+
 ## Documentation
 
 The [architecture guide](docs/ARCHITECTURE.md) is the Doxygen landing page.

@@ -1,26 +1,39 @@
 # Support and Roadmap {#control_support_roadmap}
 
-For source organization and synthesis flow, see the [architecture guide](ARCHITECTURE.md).
-
 ## Current scope
 
-State-space/plant models and the available feedback/observer formulations have
-unit tests. These include H2/H-infinity and
-polytopic cases; each formulation's assumptions are documented in its header.
-This is not a claim of support for every control design problem.
+State-space/plant models, H2/H-infinity feedback and observers, and polytopic
+formulations have unit coverage. The [ACC example](../examples/clf_cbf_qp/README.md)
+demonstrates a native CLF-CBF-QP with closed-loop simulation checks.
+See the [architecture guide](ARCHITECTURE.md) for source organization.
 
-Numerical and optimization capabilities depend on Akreon Linalg and Akreon Convex.
-Their unsupported targets or cones do not become supported through Control.
-A solved synthesis problem alone does not establish closed-loop performance.
+## Planned work
 
-## Remaining work
+- **MPC:** constrained finite-horizon formulations and receding-horizon execution.
+- **MHE:** constrained estimation, arrival costs, and window updates.
+- **CLF-CBF-QP:** general safety filters and barrier synthesis, outlined below.
+- **Examples:** more C++ and Python applications with closed-loop validation.
+- **Numerics:** gain-recovery conditioning, scaling sensitivity, and regression tests.
 
-- Model predictive control (MPC): constrained finite-horizon formulations and receding-horizon execution.
-- Moving-horizon estimation (MHE): constrained estimation, arrival costs, and window updates.
-- Control barrier functions (CBF): safety-filter formulations and infeasibility handling.
-- More C++ and Python examples with feasibility and closed-loop validation.
-- Numerical hardening: gain-recovery conditioning diagnostics, scaling sensitivity,
-  and formulation-specific regression tests.
+Control owns control formulations; Convex owns optimization modeling and solver
+numerics. Capabilities depend on the underlying Linalg and Convex support.
 
-These items carry no delivery commitment. Solver/KKT regularization belongs to
-Convex; control-specific formulations and gain recovery belong here.
+## CLF-CBF-QP and barrier synthesis
+
+Build from the [ACC example](../examples/clf_cbf_qp/README.md):
+
+1. Add a second example with multiple barriers or control inputs.
+2. Extract reusable online QP assembly accepting CLF/CBF values and Lie
+   derivatives, decay functions, input bounds, cost weights, and slack policy.
+   Start with control-affine systems and relative-degree-one barriers; extend
+   to higher relative degree, uncertainty, and sampled-data formulations.
+3. Add polynomial/SOS modeling to **Convex**: polynomial bases, coefficient
+   matching, Gram matrices, and semidefinite constraints.
+4. Develop offline barrier verification and synthesis in **Control**, given
+   dynamics, input limits, a certification domain, and safety specifications.
+   Explore alternating solves for coupled barrier/policy searches.
+5. Export synthesized `h` and its derivatives through the same online interface
+   as hand-designed barriers, retaining the certificate's domain and assumptions.
+
+References: [Ames et al., CBF theory and applications](https://arxiv.org/abs/1903.11199)
+and [Clark, CBF verification and synthesis](https://arxiv.org/abs/2104.14001).
