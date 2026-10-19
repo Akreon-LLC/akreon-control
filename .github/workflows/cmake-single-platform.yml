@@ -105,6 +105,7 @@ jobs:
 
           cmake --preset ${{ env.PRESET }} \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+            -DAKREON_CONTROL_BUILD_EXAMPLES=ON \
             -DCMAKE_C_COMPILER="$CC" \
             -DCMAKE_CXX_COMPILER="$CXX" \
             -DFETCHCONTENT_SOURCE_DIR_AKREON_LINALG="$GITHUB_WORKSPACE/.deps/akreon-linalg" \

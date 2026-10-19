@@ -157,6 +157,8 @@ published to GitHub Pages; no separate copy of the architecture guide is needed.
 If you use this software in research, please cite it using the metadata in
 [CITATION.cff](CITATION.cff).
 
+[![DOI](https://zenodo.org/badge/1424743167.svg)](https://doi.org/10.5281/zenodo.23485956)
+
 ## License and notices
 
 Licensed under [Apache 2.0](LICENSE). See [NOTICE](NOTICE) for attribution
