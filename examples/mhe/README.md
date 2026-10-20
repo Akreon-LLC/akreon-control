@@ -47,17 +47,10 @@ cap, `Delta = 10`, and default `1e-5` tolerances.
 
 ## Run
 
-From `akreon-control`, with a C++26 toolchain:
+Build using the [native example commands](https://github.com/Akreon-LLC/akreon-control#build-and-run-native-examples), then run from `akreon-control`:
 
 ```sh
-cmake -S . -B build/examples -DCMAKE_BUILD_TYPE=Release \
-  -DAKREON_CONTROL_BUILD_EXAMPLES=ON \
-  -DBUILD_UNIT_TESTS=OFF -DBUILD_FUNCTIONAL_TESTS=OFF \
-  -DFETCHCONTENT_SOURCE_DIR_AKREON_LINALG=../akreon-linalg \
-  -DFETCHCONTENT_SOURCE_DIR_AKREON_CONVEX=../akreon-convex
-cmake --build build/examples --parallel 2
 build/examples/examples/mhe/mhe_double_integrator
-ctest --test-dir build/examples --output-on-failure
 ```
 
 Edit the configuration, initial states, input, disturbance, and noise seed in
@@ -68,5 +61,4 @@ simulation and error reporting. Estimation begins after filling the first window
 
 The executable checks solver success, velocity bounds, condensed dynamics, and
 estimation errors. Typical position/velocity RMSE is 0.069 m / 0.072 m/s, versus
-0.101 m for raw position and 0.689 m/s for finite-difference velocity. The first
-solve takes 20 iterations; warm solves average 7.82 (maximum 14).
+0.101 m for raw position and 0.689 m/s for finite-difference velocity.

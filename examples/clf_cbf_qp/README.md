@@ -62,21 +62,13 @@ Incompatible CBF and actuator bounds raise `InfeasibleQP`.
 
 The first solve is cold; later solves reuse the full primal-dual iterate stored
 in `main`. Before reuse, cone variables are blended 1% toward their interior
-seeds to avoid boundary stalls. The default run takes 16 iterations initially;
-warm solves average about 7.81 iterations, with a maximum of 9.
+seeds to avoid boundary stalls.
 
 ## Run
 
-From `akreon-control`, with a C++26 toolchain:
+Build using the [native example commands](https://github.com/Akreon-LLC/akreon-control#build-and-run-native-examples), then run from `akreon-control`:
 
 ```sh
-cmake -S . -B build/examples -DCMAKE_BUILD_TYPE=Release \
-  -DAKREON_CONTROL_BUILD_EXAMPLES=ON \
-  -DBUILD_UNIT_TESTS=OFF -DBUILD_FUNCTIONAL_TESTS=OFF \
-  -DFETCHCONTENT_SOURCE_DIR_AKREON_LINALG=../akreon-linalg \
-  -DFETCHCONTENT_SOURCE_DIR_AKREON_CONVEX=../akreon-convex
-cmake --build build/examples --parallel 2
-ctest --test-dir build/examples --output-on-failure
 build/examples/examples/clf_cbf_qp/clf_cbf_qp_acc
 ```
 

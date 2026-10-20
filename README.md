@@ -1,165 +1,145 @@
 # akreon-control
 
-A header-only C++26 library for optimal and robust control and state estimation,
-with native examples of model predictive control (MPC), moving-horizon estimation
-(MHE), and CLF-CBF-QP safety filters.
+Header-only C++26 control and state estimation, built on [akreon-linalg](https://github.com/Akreon-LLC/akreon-linalg) and [akreon-convex](https://github.com/Akreon-LLC/akreon-convex).
 
-Public target: `Akreon::Control`; installed package:
-`AkreonControl`.
-Control and estimation APIs use the `control` namespace.
-Public headers live under `include/akreon/control/`. Only canonical `akreon/...` include paths are supported.
+[Documentation](https://akreon-llc.github.io/akreon-control/) · [Architecture](docs/ARCHITECTURE.md) · [Support and roadmap](docs/ROADMAP.md) · [Native examples](examples/) · [Python bindings](bindings/README.md) · [Releases](https://github.com/Akreon-LLC/akreon-control/releases)
 
-## Compatibility
+[![DOI](https://zenodo.org/badge/1424743167.svg)](https://doi.org/10.5281/zenodo.23485956)
 
-See the [support roadmap](docs/ROADMAP.md) for implemented capabilities and
-planned work.
+## Capabilities
+
+- Fixed-size continuous/discrete state-space models, role-tagged plant ports, and zero-order-hold discretization.
+- State-feedback and Luenberger observer design, H₂/H∞ synthesis, and polytopic formulations.
+- Convex problem construction, controller/observer gain recovery, and numerical diagnostics.
+- Optional Python/C bindings for selected compiled dimensions.
+
+MPC, MHE, and CLF-CBF-QP are demonstrated as native examples; reusable formulation APIs remain planned. See the [roadmap](docs/ROADMAP.md) for support boundaries.
+
+## Native control & estimation examples
+
+| Example | Demonstrates |
+|---|---|
+| [H₂ state feedback](examples/consumer/main.cpp) | Plant construction, SDP synthesis, and gain recovery |
+| [MPC](examples/mpc/README.md) | Constrained double-integrator control with terminal feedback and warm starts |
+| [MHE](examples/mhe/README.md) | Position/velocity estimation with an arrival prior and shifted warm starts |
+| [CLF-CBF-QP](examples/clf_cbf_qp/README.md) | Adaptive cruise control with tracking, headway, and actuator constraints |
+
+### Build and run native examples
+
+```sh
+cmake -S . -B build/examples -DCMAKE_BUILD_TYPE=Release \
+  -DAKREON_CONTROL_BUILD_EXAMPLES=ON \
+  -DBUILD_UNIT_TESTS=OFF -DBUILD_FUNCTIONAL_TESTS=OFF \
+  -DFETCHCONTENT_SOURCE_DIR_AKREON_LINALG=/absolute/path/akreon-linalg \
+  -DFETCHCONTENT_SOURCE_DIR_AKREON_CONVEX=/absolute/path/akreon-convex
+cmake --build build/examples --parallel 2
+ctest --test-dir build/examples --output-on-failure
+```
+
+Example READMEs describe their models, checks, and assumptions. The CLF-CBF-QP simulation does not establish continuous-time safety.
+
+## Python bindings and notebooks
+
+Requires Python 3.12+. Install `akreon-control` and import `akreon_native`. See the [binding contract](bindings/README.md) for supported dimensions and result semantics.
+
+From a local repository checkout:
+
+```sh
+python3.12 -m venv .venv
+
+.venv/bin/python -m pip install --upgrade pip
+
+.venv/bin/python -m pip install ".[examples,test]" \
+  --config-settings=cmake.define.FETCHCONTENT_SOURCE_DIR_AKREON_LINALG=/absolute/path/akreon-linalg \
+  --config-settings=cmake.define.FETCHCONTENT_SOURCE_DIR_AKREON_CONVEX=/absolute/path/akreon-convex
+```
+
+Run the binding tests:
+
+```sh
+.venv/bin/python -m pytest bindings/python/tests
+```
+
+Launch the notebooks:
+
+```sh
+.venv/bin/python -m ipykernel install \
+  --prefix .venv \
+  --name akreon-control \
+  --display-name "Akreon Control"
+
+.venv/bin/jupyter lab examples
+```
+
+Open the [CartPole](examples/cartpole/cartpole.ipynb) or [quarter-car wheel](examples/quarter_car_wheel/quarter_car_wheel.ipynb) notebook using the Akreon Control kernel.
+
+The optional C ABI can also be built independently with `AKREON_CONTROL_BUILD_C_BINDINGS=ON`.
+
+## Dependencies
+
+Requires CMake 3.30+ and a C++26 compiler with constexpr math support. Linalg and Convex resolve from local `FETCHCONTENT_SOURCE_DIR_AKREON_*` overrides, installed packages through `CMAKE_PREFIX_PATH`, then FetchContent (default `v0.1.0`). Override revisions with `AKREON_LINALG_GIT_TAG` and `AKREON_CONVEX_GIT_TAG`.
 
 ## Build and test
 
-Use CMake 3.30+ (for the exported `cxx_std_26` requirement) and a C++26-capable compiler with constexpr math support.
-From this checkout:
+For a standard C++ build:
 
 ```sh
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
-  -DFETCHCONTENT_SOURCE_DIR_AKREON_LINALG=/absolute/path/akreon-linalg \
-  -DFETCHCONTENT_SOURCE_DIR_AKREON_CONVEX=/absolute/path/akreon-convex
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel 2
 ctest --test-dir build --output-on-failure
 ```
 
-`host-default` and `host-functional-only` presets are also available. Pass the
-same local-source overrides when configuring presets. Tests default on only for
-the top-level project. Disable tests using `-DBUILD_UNIT_TESTS=OFF
--DBUILD_FUNCTIONAL_TESTS=OFF`.
-
-## Dependencies
-
-The library depends on `akreon-linalg` (`Akreon::Linalg`) and `akreon-convex` (`Akreon::Convex`).
-Each dependency resolves in this order:
-
-1. An explicit local checkout via `FETCHCONTENT_SOURCE_DIR_AKREON_LINALG`, `FETCHCONTENT_SOURCE_DIR_AKREON_CONVEX`.
-2. An installed CMake package found through `CMAKE_PREFIX_PATH`.
-3. FetchContent from the corresponding `Akreon-LLC/akreon-<name>` Git repository,
-   pinned to the planned `v0.1.0` release.
-
-The build command above uses local checkouts. No sibling-directory layout or
-Git submodules are required. Until release tags exist, use local checkouts or
-installed packages. For private Git access or another compatible release, set
-`AKREON_LINALG_GIT_REPOSITORY` / `AKREON_LINALG_GIT_TAG`, `AKREON_CONVEX_GIT_REPOSITORY` / `AKREON_CONVEX_GIT_TAG`.
-
-Unit tests use installed Catch2 3 or fetch v3.8.1. For offline testing, pass
-`-DFETCHCONTENT_SOURCE_DIR_CATCH2=/absolute/path/to/Catch2`.
-
-## Install and consume
-
-The [consumer example](examples/consumer) shows how a separate CMake project
-uses the installed library. Ensure `akreon-linalg` and `akreon-convex` are installed
-into the same prefix (or include their prefixes in `CMAKE_PREFIX_PATH`). After
-building above, install this package, then configure, build, and test the example:
+The top-level project enables its unit and functional tests by default. They can be disabled using:
 
 ```sh
-cmake --install build --prefix /absolute/path/akreon-install
-cmake -S examples/consumer -B build/consumer \
-  -DCMAKE_PREFIX_PATH=/absolute/path/akreon-install
-cmake --build build/consumer
-ctest --test-dir build/consumer --output-on-failure
+-DBUILD_UNIT_TESTS=OFF -DBUILD_FUNCTIONAL_TESTS=OFF
 ```
 
-The example's [CMakeLists.txt](examples/consumer/CMakeLists.txt) finds the package
-and links its `consumer` executable:
+Tests use Catch2 3. Optional Python/C ABI bindings and native MPC/MHE/CLF-CBF-QP examples are controlled by separate CMake options.
+
+The production C++ library has no Python dependency.
+
+## Use in another CMake project
+
+The public target is `Akreon::Control`, exported by the `AkreonControl` package.
 
 ```cmake
 find_package(AkreonControl 0.1 CONFIG REQUIRED)
-add_executable(consumer main.cpp)
-target_link_libraries(consumer PRIVATE Akreon::Control)
+
+add_executable(my_controller main.cpp)
+target_link_libraries(my_controller PRIVATE Akreon::Control)
 ```
 
-Its [main.cpp](examples/consumer/main.cpp) includes `<akreon/control/control.hpp>`
-and synthesizes H2 state feedback for a two-state plant, recovers the gain, and
-checks the gain, closed-loop poles, and objective against the analytic solution.
-Follow the same pattern in your own project, setting `CMAKE_PREFIX_PATH` to the
-installation prefix. `Akreon::Linalg` and `Akreon::Convex` propagate through
-`Akreon::Control`, along with include directories and the C++ standard requirement.
-Installed packages resolve their dependencies without fetching source.
+Include the public API using:
 
-## Python bindings and notebooks (robust & optimal control examples)
+```cpp
+#include <akreon/control/control.hpp>
+```
 
-Python support is optional; C++ builds do not require Python or nanobind. From
-this repository, use Python 3.12 or newer and install the package and example/test
-dependencies. Replace the dependency paths with your local checkouts:
+The CMake target propagates its public include paths, C++ standard requirement, and Linalg/Convex dependencies.
+
+To install Akreon Control:
 
 ```sh
-python3.12 -m venv .venv
-.venv/bin/python -m pip install --upgrade pip
-.venv/bin/python -m pip install ".[examples,test]" \
-  --config-settings=cmake.define.FETCHCONTENT_SOURCE_DIR_AKREON_LINALG=/absolute/path/akreon-linalg \
-  --config-settings=cmake.define.FETCHCONTENT_SOURCE_DIR_AKREON_CONVEX=/absolute/path/akreon-convex
-.venv/bin/python -m pytest bindings/python/tests
-.venv/bin/python -m ipykernel install --prefix .venv --name akreon-control --display-name "Akreon Control"
-.venv/bin/jupyter lab examples
+cmake --install build --prefix /absolute/path/akreon-install
 ```
 
-Open [CartPole](examples/cartpole/cartpole.ipynb) or
-[quarter-car wheel](examples/quarter_car_wheel/quarter_car_wheel.ipynb) with the
-`Akreon Control` kernel. They call `akreon_native.controls` directly and use
-`akreon_native.plot` for diagnostics.
-Generalized feedback calls specify `exogenous_dim`; observers specify
-`performance_dim` to describe the input/output port split.
+Ensure Akreon Linalg and Akreon Convex are also installed and discoverable through the same prefix or `CMAKE_PREFIX_PATH`.
 
-For an optional C ABI/Python CMake build and native tests:
+The [consumer example](examples/consumer) demonstrates installed-package consumption and H₂ state-feedback synthesis.
 
-```sh
-cmake -S . -B build/python \
-  -DAKREON_CONTROL_BUILD_PYTHON=ON \
-  -DAKREON_CONTROL_BUILD_BINDING_TESTS=ON \
-  -DBUILD_UNIT_TESTS=OFF -DBUILD_FUNCTIONAL_TESTS=OFF \
-  -DPython_EXECUTABLE="$PWD/.venv/bin/python" \
-  -DFETCHCONTENT_SOURCE_DIR_AKREON_LINALG=/absolute/path/akreon-linalg \
-  -DFETCHCONTENT_SOURCE_DIR_AKREON_CONVEX=/absolute/path/akreon-convex
-cmake --build build/python --parallel 2
-ctest --test-dir build/python --output-on-failure
-```
+## Documentation and verification
 
-Use `AKREON_CONTROL_BUILD_C_BINDINGS=ON` alone for the C ABI without Python.
-The [binding contract](bindings/README.md) describes compiled dimensions and results.
+See [architecture](docs/ARCHITECTURE.md), [support and roadmap](docs/ROADMAP.md), [contributing](CONTRIBUTING.md), and [security](SECURITY.md).
 
-## Native control & estimation examples
-
-- [CLF-CBF-QP adaptive cruise control](examples/clf_cbf_qp/README.md): speed
-  tracking and following-distance safety, with cold and warm native QP solves.
-- [MPC double integrator](examples/mpc/README.md): a constrained 20-step horizon,
-  receding-horizon execution, and an H2-derived terminal cost.
-- [MHE double integrator](examples/mhe/README.md): position-only measurements,
-  velocity reconstruction, an arrival prior, and shifted warm starts.
-
-Enable native examples with `AKREON_CONTROL_BUILD_EXAMPLES=ON`. Each README
-provides build commands; CTest runs the example executable with its built-in
-checks. General MPC, MHE, and CLF-CBF-QP formulations are on the
-[roadmap](docs/ROADMAP.md).
-
-## Documentation
-
-The [architecture guide](docs/ARCHITECTURE.md) is the Doxygen landing page.
-Contributor workflow is in [CONTRIBUTING.md](CONTRIBUTING.md); test coverage is
-in [tests/README.md](tests/README.md).
-API and algorithm documentation is generated from the header comments. To build
-both together, install Doxygen and Graphviz, then run from this repository:
+Generate API documentation with Doxygen and Graphviz installed:
 
 ```sh
 doxygen Doxyfile
 ```
 
-Open `docs/doxygen/html/index.html`. The same generated HTML directory can be
-published to GitHub Pages; no separate copy of the architecture guide is needed.
+Open `docs/doxygen/html/index.html`. Tests cover implemented cases, not every dimension or conditioning regime.
 
-## Citation
+## Citation and license
 
-If you use this software in research, please cite it using the metadata in
-[CITATION.cff](CITATION.cff).
-
-[![DOI](https://zenodo.org/badge/1424743167.svg)](https://doi.org/10.5281/zenodo.23485956)
-
-## License and notices
-
-Licensed under [Apache 2.0](LICENSE). See [NOTICE](NOTICE) for attribution
-information.
+For research citation, use [CITATION.cff](CITATION.cff). Licensed under [Apache 2.0](LICENSE); see [NOTICE](NOTICE) for attribution.
