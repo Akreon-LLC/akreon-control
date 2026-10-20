@@ -2,20 +2,21 @@
 # SPDX-License-Identifier: Apache-2.0
 
 PROJECT_NAME           = "akreon-control"
-PROJECT_BRIEF          = "General-purpose optimal and robust control and state estimation"
+PROJECT_BRIEF          = "Optimal and robust control and state estimation in C++26."
 OUTPUT_DIRECTORY       = docs/doxygen
-INPUT                  = include/akreon bindings/c/include docs/ARCHITECTURE.md docs/ROADMAP.md
+INPUT                  = include/akreon bindings/c/include docs/INDEX.md docs/ARCHITECTURE.md docs/ROADMAP.md \
+                         examples/mpc/README.md examples/mhe/README.md examples/clf_cbf_qp/README.md
 FILE_PATTERNS          = *.hpp *.h *.md
 RECURSIVE              = YES
 EXCLUDE_PATTERNS       = */docs/doxygen/*
 EXTRACT_ALL            = YES
-EXTRACT_PRIVATE        = YES
+EXTRACT_PRIVATE        = NO
 EXTRACT_STATIC         = YES
 GENERATE_HTML          = YES
 GENERATE_LATEX         = NO
 WARN_IF_UNDOCUMENTED   = YES
 WARN_AS_ERROR          = NO
-USE_MDFILE_AS_MAINPAGE = docs/ARCHITECTURE.md
+USE_MDFILE_AS_MAINPAGE = docs/INDEX.md
 QUIET                  = YES
 JAVADOC_AUTOBRIEF      = YES
 MARKDOWN_SUPPORT       = YES
@@ -26,9 +27,7 @@ REFERENCES_RELATION    = YES
 
 # Graphviz output
 #
-# Generate call and dependency graphs with bounded breadth/depth for the
-# template-heavy headers. SVG output keeps
-# generated diagrams readable when zoomed in browser docs.
+# Keep type and dependency diagrams bounded for template-heavy headers.
 HAVE_DOT               = YES
 DOT_IMAGE_FORMAT       = svg
 INTERACTIVE_SVG        = YES
@@ -43,10 +42,23 @@ GRAPHICAL_HIERARCHY    = YES
 GROUP_GRAPHS           = YES
 
 # Function call trees
-CALL_GRAPH             = YES
-CALLER_GRAPH           = YES
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
 
 # Dependency trees
 INCLUDE_GRAPH          = YES
 INCLUDED_BY_GRAPH      = YES
 DIRECTORY_GRAPH        = YES
+
+# Navigation and sidebar-only Doxygen Awesome theme
+GENERATE_TREEVIEW      = YES
+DISABLE_INDEX          = NO
+FULL_SIDEBAR           = NO
+HTML_COLORSTYLE        = LIGHT
+HTML_EXTRA_STYLESHEET  = docs/theme/doxygen-awesome.css \
+                         docs/theme/doxygen-awesome-sidebar-only.css \
+                         docs/theme/akreon.css
+
+# Render equations in the browser
+USE_MATHJAX            = YES
+MATHJAX_VERSION        = MathJax_3

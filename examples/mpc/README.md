@@ -71,22 +71,14 @@ solution. No terminal set is imposed.
 
 ## Run
 
-From `akreon-control` with a C++26 toolchain:
+Build using the [native example commands](https://github.com/Akreon-LLC/akreon-control#build-and-run-native-examples), then run from `akreon-control`:
 
 ```sh
-cmake -S . -B build/examples -DCMAKE_BUILD_TYPE=Release \
-  -DAKREON_CONTROL_BUILD_EXAMPLES=ON \
-  -DBUILD_UNIT_TESTS=OFF -DBUILD_FUNCTIONAL_TESTS=OFF \
-  -DFETCHCONTENT_SOURCE_DIR_AKREON_LINALG=../akreon-linalg \
-  -DFETCHCONTENT_SOURCE_DIR_AKREON_CONVEX=../akreon-convex
-cmake --build build/examples --parallel 2
 build/examples/examples/mpc/mpc_double_integrator
-ctest --test-dir build/examples --output-on-failure
 ```
 
 Edit the configuration, initial state, and horizon in `main.cpp`. The executable
 prints `K`, `P`, final state, peak input/velocity, and iteration counts. It checks
 solver success, predicted bounds, condensed predictions against direct plant
 propagation, and final regulation. The default run reaches position and velocity
-below `1e-5`. The first solve takes 16 iterations; the 59 warm solves average
-about 6.71 iterations (maximum 10).
+below `1e-5`.
