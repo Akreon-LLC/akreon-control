@@ -18,6 +18,17 @@
       }
     },
     {
+      "name": "host-sanitized",
+      "displayName": "Host Sanitized",
+      "description": "Host C++ tests and examples with AddressSanitizer and UndefinedBehaviorSanitizer",
+      "inherits": "host-default",
+      "binaryDir": "${sourceDir}/out/build/host-sanitized",
+      "cacheVariables": {
+        "AKREON_CONTROL_ENABLE_SANITIZERS": "ON",
+        "AKREON_CONTROL_BUILD_EXAMPLES": "ON"
+      }
+    },
+    {
       "name": "host-functional-only",
       "displayName": "Host Functional Only",
       "description": "Host build without unit tests/Catch2",
@@ -35,8 +46,21 @@
       "configurePreset": "host-default"
     },
     {
+      "name": "host-sanitized",
+      "configurePreset": "host-sanitized"
+    },
+    {
       "name": "host-functional-only",
       "configurePreset": "host-functional-only"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "host-sanitized",
+      "configurePreset": "host-sanitized",
+      "output": {
+        "outputOnFailure": true
+      }
     }
   ]
 }

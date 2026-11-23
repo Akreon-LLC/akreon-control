@@ -36,14 +36,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: Akreon-LLC/akreon-linalg
-          ref: ${{ vars.AKREON_LINALG_REF || 'main' }}
+          ref: ${{ vars.AKREON_LINALG_REF || 'v0.1.1' }}
           path: .deps/akreon-linalg
           token: ${{ secrets.AKREON_DEPENDENCY_TOKEN || github.token }}
 
       - uses: actions/checkout@v4
         with:
           repository: Akreon-LLC/akreon-convex
-          ref: ${{ vars.AKREON_CONVEX_REF || 'main' }}
+          ref: ${{ vars.AKREON_CONVEX_REF || 'v0.1.1' }}
           path: .deps/akreon-convex
           token: ${{ secrets.AKREON_DEPENDENCY_TOKEN || github.token }}
 

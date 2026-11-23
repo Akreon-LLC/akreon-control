@@ -77,7 +77,9 @@ The optional C ABI can also be built independently with `AKREON_CONTROL_BUILD_C_
 
 ## Dependencies
 
-Requires CMake 3.30+ and a C++26 compiler with constexpr math support. Linalg and Convex resolve from local `FETCHCONTENT_SOURCE_DIR_AKREON_*` overrides, installed packages through `CMAKE_PREFIX_PATH`, then FetchContent (default `v0.1.0`). Override revisions with `AKREON_LINALG_GIT_TAG` and `AKREON_CONVEX_GIT_TAG`.
+Requires CMake 3.30+ and a C++26 compiler with constexpr math support. CMake reuses existing Linalg and Convex targets when available. Otherwise, it resolves dependencies from local `FETCHCONTENT_SOURCE_DIR_AKREON_*` overrides, installed packages through `CMAKE_PREFIX_PATH`, then FetchContent (default `v0.1.1` for both dependencies). Set the FetchContent revisions with `AKREON_LINALG_GIT_TAG` and `AKREON_CONVEX_GIT_TAG`. Existing build directories retain cached revisions. To pick up the new defaults, configure in a fresh build directory or set both tag variables to `v0.1.1` explicitly.
+
+For installed dependencies, use packages built from both `v0.1.1` tags to match this combination. Both releases still report CMake package version `0.1.0`.
 
 ## Build and test
 
@@ -98,6 +100,20 @@ The top-level project enables its unit and functional tests by default. They can
 Tests use Catch2 3. Optional Python/C ABI bindings and native MPC/MHE/CLF-CBF-QP examples are controlled by separate CMake options.
 
 The production C++ library has no Python dependency.
+
+### Optional sanitizer checks
+
+Use GCC or Clang with a GNU-compatible driver and installed sanitizer runtimes.
+
+```sh
+cmake --preset host-sanitized
+cmake --build --preset host-sanitized --parallel 2
+ctest --preset host-sanitized
+```
+
+For a custom build, set `-DAKREON_CONTROL_ENABLE_SANITIZERS=ON`. This
+privately links `Akreon::LinalgSanitizers` to Control's C++ unit tests and
+enabled native examples. The preset enables all three native examples.
 
 ## Use in another CMake project
 
