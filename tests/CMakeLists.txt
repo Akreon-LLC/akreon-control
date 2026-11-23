@@ -1,4 +1,7 @@
 function(akreon_test_options target)
+  if(AKREON_CONTROL_ENABLE_SANITIZERS)
+    target_link_libraries(${target} PRIVATE Akreon::LinalgSanitizers)
+  endif()
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(${target} PRIVATE -fconstexpr-depth=65536 -fconstexpr-steps=2000000000)
   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
